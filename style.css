@@ -95,8 +95,9 @@ nav {
 }
 
 /* Hero */
-.hero {
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+ .hero {
+  background: linear-gradient(135deg, rgba(15,12,41,0.85), rgba(48,43,99,0.85), rgba(36,36,62,0.85)),
+              url('images/background.jpg') center center / cover no-repeat;
   color: #ffffff;
   padding: 120px 60px;
   text-align: center;

@@ -1,4 +1,6 @@
+// =============================================
 // Mobile navigation toggle
+// =============================================
 var navToggle = document.querySelector('.nav-toggle');
 var navLinks = document.querySelector('.nav-links');
 
@@ -8,7 +10,6 @@ if (navToggle) {
   });
 }
 
-// Close mobile menu when a link is clicked
 var allNavLinks = document.querySelectorAll('.nav-links a');
 allNavLinks.forEach(function(link) {
   link.addEventListener('click', function() {
@@ -16,7 +17,43 @@ allNavLinks.forEach(function(link) {
   });
 });
 
+// =============================================
+// jQuery Animations
+// =============================================
+$(document).ready(function() {
+
+  // Fade in hero/page-header content on page load
+  $('.hero-content').hide().fadeIn(1200);
+  $('.page-header .section-inner').hide().fadeIn(1200);
+
+  // Card hover lift using jQuery
+  $('.card').on('mouseenter', function() {
+    $(this).stop(true).animate({ marginTop: '-6px' }, 200);
+  }).on('mouseleave', function() {
+    $(this).stop(true).animate({ marginTop: '0px' }, 200);
+  });
+
+  // Scroll-based section fade-in using jQuery + IntersectionObserver
+  var fadeSections = document.querySelectorAll('section');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        $(entry.target).animate({ opacity: 1 }, 600);
+        $(entry.target).css('transform', 'translateY(0)');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  fadeSections.forEach(function(section) {
+    $(section).css({ opacity: 0, transform: 'translateY(24px)', transition: 'transform 0.6s ease' });
+    observer.observe(section);
+  });
+
+});
+
+// =============================================
 // Character counter for message textarea
+// =============================================
 var messageBox = document.getElementById('message');
 var charCount = document.getElementById('char-count');
 
@@ -32,101 +69,72 @@ if (messageBox) {
   });
 }
 
+// =============================================
 // Form validation
+// =============================================
 var form = document.getElementById('contact-form');
 
 if (form) {
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-
     var valid = true;
 
-    // Clear all previous errors
     document.getElementById('name-error').textContent = '';
     document.getElementById('email-error').textContent = '';
     document.getElementById('phone-error').textContent = '';
     document.getElementById('subject-error').textContent = '';
     document.getElementById('message-error').textContent = '';
 
-    // Remove red borders
-    document.querySelectorAll('.form-group input, .form-group select, .form-group textarea').forEach(function(field) {
-      field.style.borderColor = '#e2e8f0';
-    });
+    $('input, select, textarea').css('border-color', '#e2e8f0');
 
-    // Validate name
     var nameField = document.getElementById('name');
-    var name = nameField.value.trim();
-    if (name === '') {
+    if (nameField.value.trim() === '') {
       document.getElementById('name-error').textContent = 'Please enter your full name.';
-      nameField.style.borderColor = '#ef4444';
+      $(nameField).css('border-color', '#ef4444');
       valid = false;
     }
 
-    // Validate email
     var emailField = document.getElementById('email');
     var email = emailField.value.trim();
     var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email === '') {
       document.getElementById('email-error').textContent = 'Please enter your email address.';
-      emailField.style.borderColor = '#ef4444';
+      $(emailField).css('border-color', '#ef4444');
       valid = false;
     } else if (!emailPattern.test(email)) {
       document.getElementById('email-error').textContent = 'Please enter a valid email address.';
-      emailField.style.borderColor = '#ef4444';
+      $(emailField).css('border-color', '#ef4444');
       valid = false;
     }
 
-    // Validate phone if filled
     var phoneField = document.getElementById('phone');
     var phone = phoneField.value.trim();
     var phonePattern = /^[0-9\s\+\-]{7,15}$/;
     if (phone !== '' && !phonePattern.test(phone)) {
       document.getElementById('phone-error').textContent = 'Please enter a valid phone number.';
-      phoneField.style.borderColor = '#ef4444';
+      $(phoneField).css('border-color', '#ef4444');
       valid = false;
     }
 
-    // Validate subject
     var subjectField = document.getElementById('subject');
-    var subject = subjectField.value;
-    if (subject === '') {
+    if (subjectField.value === '') {
       document.getElementById('subject-error').textContent = 'Please select a subject.';
-      subjectField.style.borderColor = '#ef4444';
+      $(subjectField).css('border-color', '#ef4444');
       valid = false;
     }
 
-    // Validate message
     var messageField = document.getElementById('message');
-    var message = messageField.value.trim();
-    if (message === '') {
+    if (messageField.value.trim() === '') {
       document.getElementById('message-error').textContent = 'Please write a message before sending.';
-      messageField.style.borderColor = '#ef4444';
+      $(messageField).css('border-color', '#ef4444');
       valid = false;
     }
 
-    // Show success if all valid
+    // jQuery fadeOut form, fadeIn success message
     if (valid) {
-      form.style.display = 'none';
-      document.getElementById('form-success').style.display = 'block';
+      $(form).fadeOut(400, function() {
+        $('#form-success').fadeIn(600);
+      });
     }
   });
 }
-
-// Fade in sections on scroll
-var fadeSections = document.querySelectorAll('section');
-
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, { threshold: 0.08 });
-
-fadeSections.forEach(function(section) {
-  section.style.opacity = '0';
-  section.style.transform = 'translateY(24px)';
-  section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-  observer.observe(section);
-});
